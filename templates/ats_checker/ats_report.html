@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}ATS Audit Report: {{ resume.title }} — ResumeForge AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Top Summary Banner -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-success-subtle text-success border border-success-subtle">
+              <i class="bi bi-shield-check me-1"></i> ATS Compatibility Diagnostic
+            </span>
+            <small class="text-muted">{{ report.created_at|date:"M d, Y" }}</small>
+          </div>
+          <h3 class="fw-bold mb-1">{{ resume.title }}</h3>
+          <p class="text-muted mb-0">Target Role: <strong>{{ resume.target_role }}</strong>{% if job_analysis %} • Matched Against: {{ job_analysis.job_title }}{% endif %}</p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{% url 'resume_edit' resume.pk %}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-pencil me-1"></i> Edit & Apply Tips
+          </a>
+          <a href="{% url 'resume_preview' resume.pk %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-eye me-1"></i> View Resume Preview
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transparent Score Cards -->
+  <div class="row g-3 mb-4 text-center">
+    <!-- Overall Score -->
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100 p-3">
+        <small class="text-uppercase text-muted fw-bold">Overall ATS Score</small>
+        <div class="score-circle my-3" style="border-color: {% if report.overall_score >= 80 %}#059669{% elif report.overall_score >= 60 %}#2563eb{% else %}#d97706{% endif %};">
+          <span class="number" style="color: {% if report.overall_score >= 80 %}#059669{% elif report.overall_score >= 60 %}#2563eb{% else %}#d97706{% endif %};">
+            {{ report.overall_score|floatformat:0 }}%
+          </span>
+        </div>
+        <span class="small text-muted">Weighted composite</span>
+      </div>
+    </div>
+
+    <!-- Keyword Coverage -->
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100 p-3">
+        <small class="text-uppercase text-muted fw-bold">Keyword Coverage</small>
+        <div class="score-circle my-3" style="border-color: #2563eb;">
+          <span class="number text-primary">{{ report.keyword_score|floatformat:0 }}%</span>
+        </div>
+        <span class="small text-muted">{{ report.matched_required|length }} matched skills</span>
+      </div>
+    </div>
+
+    <!-- Section Completeness -->
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100 p-3">
+        <small class="text-uppercase text-muted fw-bold">Section Health</small>
+        <div class="score-circle my-3" style="border-color: #0ea5e9;">
+          <span class="number text-info">{{ report.section_score|floatformat:0 }}%</span>
+        </div>
+        <span class="small text-muted">Core sections verified</span>
+      </div>
+    </div>
+
+    <!-- Formatting & Readability -->
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100 p-3">
+        <small class="text-uppercase text-muted fw-bold">Formatting Quality</small>
+        <div class="score-circle my-3" style="border-color: #8b5cf6;">
+          <span class="number text-purple" style="color: #8b5cf6;">{{ report.formatting_score|floatformat:0 }}%</span>
+        </div>
+        <span class="small text-muted">{{ report.formatting_issues|length }} flags detected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transparent Scoring Formula Note -->
+  <div class="alert alert-light border small text-muted mb-4 d-flex align-items-center gap-2">
+    <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+    <div>
+      <strong>How this score is calculated:</strong> Overall = 50% Keyword Coverage + 30% Section Completeness + 20% Formatting Quality. This metric provides honest diagnostic guidance based on standard parser behavior; it does not predict human hiring decisions.
+    </div>
+  </div>
+
+  <!-- Actionable Recommendations -->
+  {% if report.suggestions %}
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-lightbulb text-warning me-2"></i> Actionable Suggestions for Improvement</h5>
+      </div>
+      <div class="card-body p-4">
+        <div class="row g-3">
+          {% for tip in report.suggestions %}
+            <div class="col-md-6">
+              <div class="border rounded p-3 h-100 {% if tip.severity == 'high' %}border-warning bg-warning-subtle{% else %}bg-light{% endif %}">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <h6 class="fw-bold mb-0 text-dark">{{ tip.title }}</h6>
+                  <span class="badge {% if tip.severity == 'high' %}bg-warning text-dark{% else %}bg-secondary{% endif %} small text-uppercase">
+                    {{ tip.category }}
+                  </span>
+                </div>
+                <p class="small text-secondary mb-0 mt-2">{{ tip.message }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Keywords Breakdown -->
+  <div class="row g-4 mb-4">
+    <!-- Matched Keywords -->
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white py-3">
+          <h6 class="fw-bold mb-0 text-success"><i class="bi bi-check2-circle me-1"></i> Matched Keywords in Resume ({{ report.matched_required|length }})</h6>
+        </div>
+        <div class="card-body p-3">
+          {% if report.matched_required %}
+            <div class="d-flex flex-wrap gap-2">
+              {% for kw in report.matched_required %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle py-2 px-3 fs-6">
+                  <i class="bi bi-check-lg me-1"></i>{{ kw }}
+                </span>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted small mb-0">No required job keywords matched yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Missing Keywords -->
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white py-3">
+          <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Missing Required Keywords ({{ report.missing_required|length }})</h6>
+        </div>
+        <div class="card-body p-3">
+          {% if report.missing_required %}
+            <div class="d-flex flex-wrap gap-2">
+              {% for kw in report.missing_required %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle py-2 px-3 fs-6">
+                  <i class="bi bi-x-lg me-1"></i>{{ kw }}
+                </span>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-success small mb-0"><i class="bi bi-check-all me-1"></i>All required skills are present in this resume!</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Health Checklist -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3">
+      <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-list-check text-primary me-2"></i> Section Completeness Breakdown</h6>
+    </div>
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light small text-uppercase">
+            <tr>
+              <th>Section Name</th>
+              <th>Status</th>
+              <th>Requirement Level</th>
+              <th>Audit Diagnostic</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for name, data in report.section_audit.items %}
+              <tr>
+                <td class="fw-bold">{{ name }}</td>
+                <td>
+                  {% if data.present %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle me-1"></i>Present</span>
+                  {% else %}
+                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-exclamation-circle me-1"></i>Action Needed</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if data.is_critical %}
+                    <span class="text-danger small fw-semibold">Mandatory</span>
+                  {% else %}
+                    <span class="text-muted small">Recommended</span>
+                  {% endif %}
+                </td>
+                <td class="text-muted small">{{ data.status }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

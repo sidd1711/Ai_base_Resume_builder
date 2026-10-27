@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Analysis: {{ analysis.job_title }} — ResumeForge AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Top Results Banner -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+              {% if analysis.is_role_preset %}Preset Archetype{% else %}Job Description Analysis{% endif %}
+            </span>
+            <small class="text-muted">{{ analysis.created_at|date:"M d, Y" }}</small>
+          </div>
+          <h3 class="fw-bold mb-1">{{ analysis.job_title }}</h3>
+          <p class="text-muted mb-0">{% if analysis.company_name %}Target Company: <strong>{{ analysis.company_name }}</strong> • {% endif %}{{ analysis.total_skills_count }} Total Skills Extracted</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editRequirementsModal">
+            <i class="bi bi-pencil me-1"></i> Edit Extracted Keywords
+          </button>
+          <a href="{% url 'resume_create_wizard' %}?job_id={{ analysis.pk }}" class="btn btn-primary btn-sm px-3">
+            <i class="bi bi-file-earmark-plus me-1"></i> Build Resume for this Role
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <!-- Required Skills Alignment Card -->
+    <div class="col-lg-6">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <span class="fw-bold text-dark"><i class="bi bi-check2-square text-danger me-2"></i> Mandatory / Required Skills ({{ analysis.required_skills|length }})</span>
+          <span class="badge bg-danger-subtle text-danger border">Core</span>
+        </div>
+        <div class="card-body p-4">
+          <h6 class="small fw-bold text-uppercase text-muted mb-2">Matched in Your Profile:</h6>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            {% if matched_req %}
+              {% for s in matched_req %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle py-2 px-3 fs-6">
+                  <i class="bi bi-check-circle me-1"></i>{{ s }}
+                </span>
+              {% endfor %}
+            {% else %}
+              <span class="text-muted small">None yet matched in your profile.</span>
+            {% endif %}
+          </div>
+
+          <h6 class="small fw-bold text-uppercase text-muted mb-2">Missing from Your Profile:</h6>
+          <div class="d-flex flex-wrap gap-2">
+            {% if missing_req %}
+              {% for s in missing_req %}
+                <span class="badge bg-warning-subtle text-dark border border-warning-subtle py-2 px-3 fs-6">
+                  <i class="bi bi-exclamation-circle text-warning me-1"></i>{{ s }}
+                </span>
+              {% endfor %}
+            {% else %}
+              <span class="text-success small"><i class="bi bi-check-all me-1"></i>All required skills covered!</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferred Skills Alignment Card -->
+    <div class="col-lg-6">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <span class="fw-bold text-dark"><i class="bi bi-plus-circle text-info me-2"></i> Preferred / Bonus Skills ({{ analysis.preferred_skills|length }})</span>
+          <span class="badge bg-info-subtle text-info border">Nice to Have</span>
+        </div>
+        <div class="card-body p-4">
+          <h6 class="small fw-bold text-uppercase text-muted mb-2">Matched in Your Profile:</h6>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            {% if matched_pref %}
+              {% for s in matched_pref %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle py-2 px-3 fs-6">
+                  <i class="bi bi-check-circle me-1"></i>{{ s }}
+                </span>
+              {% endfor %}
+            {% else %}
+              <span class="text-muted small">None currently recorded.</span>
+            {% endif %}
+          </div>
+
+          <h6 class="small fw-bold text-uppercase text-muted mb-2">Available Opportunities:</h6>
+          <div class="d-flex flex-wrap gap-2">
+            {% if missing_pref %}
+              {% for s in missing_pref %}
+                <span class="badge bg-light text-secondary border py-2 px-3 fs-6">
+                  {{ s }}
+                </span>
+              {% endfor %}
+            {% else %}
+              <span class="text-muted small">No additional preferred skills extracted.</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Qualifications and Experience Extracted -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3">
+      <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-award text-primary me-2"></i> Experience & Educational Benchmarks</h6>
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-4">
+        <div class="col-md-6 border-end">
+          <small class="text-muted text-uppercase fw-bold">Experience Benchmark</small>
+          <p class="fs-6 fw-medium text-dark mt-1 mb-0">{{ analysis.experience_required|default:"Not explicitly specified" }}</p>
+        </div>
+        <div class="col-md-6">
+          <small class="text-muted text-uppercase fw-bold">Education Benchmark</small>
+          <p class="fs-6 fw-medium text-dark mt-1 mb-0">{{ analysis.education_required|default:"Relevant degree or equivalent experience" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Requirements Modal -->
+<div class="modal fade" id="editRequirementsModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'job_analysis_edit' analysis.pk %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Edit Extracted Keywords</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-medium">Required Skills (Comma separated)</label>
+            <textarea name="required_skills_csv" class="form-control" rows="3">{{ analysis.required_skills|join:", " }}</textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-medium">Preferred Skills (Comma separated)</label>
+            <textarea name="preferred_skills_csv" class="form-control" rows="3">{{ analysis.preferred_skills|join:", " }}</textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Keywords</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

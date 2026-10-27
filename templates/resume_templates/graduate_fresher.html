@@ -1,0 +1,96 @@
+<!-- Template 4: Graduate and Fresher (Education & Projects Prioritized) -->
+<div class="resume-content graduate-fresher">
+  <div class="text-center pb-3 mb-3 border-bottom">
+    <h1 class="fw-bold mb-1" style="font-size: 22px;">{{ resume.full_name }}</h1>
+    <div class="text-muted small">
+      {{ resume.email }} • {{ resume.phone }} • {{ resume.location }}
+      {% if resume.linkedin_url %} • <a href="{{ resume.linkedin_url }}">LinkedIn</a>{% endif %}
+      {% if resume.github_url %} • <a href="{{ resume.github_url }}">GitHub</a>{% endif %}
+    </div>
+  </div>
+
+  <!-- Objective -->
+  {% if resume.professional_summary %}
+    <div class="mb-3">
+      <h6 class="text-uppercase fw-bold border-bottom pb-1 small">Career Objective</h6>
+      <p class="small text-dark mb-0">{{ resume.professional_summary }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Education First -->
+  {% if resume.selected_educations %}
+    <div class="mb-3">
+      <h6 class="text-uppercase fw-bold border-bottom pb-1 small">Education</h6>
+      {% for edu in resume.selected_educations %}
+        <div class="mb-2">
+          <div class="d-flex justify-content-between align-items-baseline">
+            <strong class="small">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</strong>
+            <span class="small text-muted">{{ edu.start_date }} – {{ edu.end_date }}</span>
+          </div>
+          <div class="small text-muted">{{ edu.institution }}{% if edu.grade_or_gpa %} • GPA/Score: {{ edu.grade_or_gpa }}{% endif %}</div>
+          {% if edu.description %}<p class="small text-secondary mb-0 mt-1">{{ edu.description }}</p>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Technical Skills -->
+  {% if resume.selected_skills %}
+    <div class="mb-3">
+      <h6 class="text-uppercase fw-bold border-bottom pb-1 small">Skills & Tools</h6>
+      <p class="small text-dark mb-0">{{ resume.selected_skills|join:", " }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Academic & Practical Projects -->
+  {% if resume.selected_projects %}
+    <div class="mb-3">
+      <h6 class="text-uppercase fw-bold border-bottom pb-1 small">Academic & Personal Projects</h6>
+      {% for proj in resume.selected_projects %}
+        <div class="mb-2">
+          <div class="d-flex justify-content-between align-items-baseline">
+            <strong class="small">{{ proj.title }}</strong>
+            {% if proj.technologies %}<span class="small text-muted">({{ proj.technologies }})</span>{% endif %}
+          </div>
+          <ul class="small text-dark ps-3 mb-1">
+            {% for b in proj.bullets %}
+              <li>{{ b }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Internships / Work -->
+  {% if resume.selected_experiences %}
+    <div class="mb-3">
+      <h6 class="text-uppercase fw-bold border-bottom pb-1 small">Internships & Work Experience</h6>
+      {% for exp in resume.selected_experiences %}
+        <div class="mb-2">
+          <div class="d-flex justify-content-between align-items-baseline">
+            <strong class="small">{{ exp.job_title }} | {{ exp.organization }}</strong>
+            <span class="small text-muted">{{ exp.start_date }} – {{ exp.end_date }}</span>
+          </div>
+          <ul class="small text-dark ps-3 mb-1">
+            {% for b in exp.bullets %}
+              <li>{{ b }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Certifications & Extracurricular -->
+  {% if resume.selected_certifications %}
+    <div class="mb-2">
+      <h6 class="text-uppercase fw-bold border-bottom pb-1 small">Certifications & Honors</h6>
+      <ul class="small text-dark ps-3 mb-0">
+        {% for cert in resume.selected_certifications %}
+          <li>{{ cert.name }} – {{ cert.issuing_organization }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>

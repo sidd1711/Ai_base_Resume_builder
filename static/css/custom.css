@@ -1,0 +1,122 @@
+/* ResumeForge AI - Core Professional Styling */
+
+:root {
+  --rf-primary: #1e40af;
+  --rf-primary-hover: #1d4ed8;
+  --rf-secondary: #0f172a;
+  --rf-accent: #0ea5e9;
+  --rf-success: #059669;
+  --rf-warning: #d97706;
+  --rf-danger: #dc2626;
+  --rf-bg: #f8fafc;
+  --rf-card-bg: #ffffff;
+  --rf-border: #e2e8f0;
+  --rf-text-main: #0f172a;
+  --rf-text-muted: #64748b;
+}
+
+body {
+  background-color: var(--rf-bg);
+  color: var(--rf-text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Navbar */
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.brand-gradient {
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Cards */
+.card {
+  border: 1px solid var(--rf-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--rf-border);
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--rf-primary);
+  border-color: var(--rf-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--rf-primary-hover);
+  border-color: var(--rf-primary-hover);
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  border-radius: 0.375rem;
+}
+
+/* Progress & ATS Metrics */
+.score-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  border: 6px solid var(--rf-primary);
+  background-color: #ffffff;
+}
+
+.score-circle .number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-circle .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--rf-text-muted);
+}
+
+/* Resume Paper Sheet Simulation */
+.resume-paper {
+  background: #ffffff;
+  width: 100%;
+  max-width: 820px;
+  min-height: 1056px;
+  margin: 0 auto;
+  padding: 48px;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .resume-paper {
+    padding: 24px;
+  }
+}

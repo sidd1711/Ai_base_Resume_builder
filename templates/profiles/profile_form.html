@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Personal Info — ResumeForge AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold"><i class="bi bi-person-gear text-primary me-2"></i> Edit Master Profile</h5>
+          <a href="{% url 'profile_detail' %}" class="btn btn-sm btn-outline-secondary">Cancel</a>
+        </div>
+        <div class="card-body p-4">
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <h6 class="text-uppercase text-muted small fw-bold mb-3">1. Contact & Identity</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label small fw-medium">Full Name *</label>
+                {{ form.full_name }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-medium">Email Address *</label>
+                {{ form.email }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-medium">Phone Number</label>
+                {{ form.phone }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-medium">City</label>
+                {{ form.city }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-medium">Country</label>
+                {{ form.country }}
+              </div>
+            </div>
+
+            <h6 class="text-uppercase text-muted small fw-bold mb-3">2. Links & Social Profiles</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <label class="form-label small fw-medium"><i class="bi bi-linkedin text-primary me-1"></i> LinkedIn URL</label>
+                {{ form.linkedin_url }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-medium"><i class="bi bi-github text-dark me-1"></i> GitHub URL</label>
+                {{ form.github_url }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-medium"><i class="bi bi-globe text-info me-1"></i> Portfolio URL</label>
+                {{ form.portfolio_url }}
+              </div>
+            </div>
+
+            <h6 class="text-uppercase text-muted small fw-bold mb-3">3. Professional Summary & Career Status</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label small fw-medium">Current Status</label>
+                {{ form.professional_status }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-medium">Years of Experience</label>
+                {{ form.years_of_experience }}
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-medium">Target Job Roles</label>
+                {{ form.target_job_roles }}
+                <div class="form-text small">e.g. Python Developer, Full-Stack Engineer, Data Analyst</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-medium">Professional Summary / Objective</label>
+                {{ form.professional_summary }}
+                <div class="form-text small">Brief overview of your experience, key competencies, and career goals.</div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 border-top pt-3">
+              <a href="{% url 'profile_detail' %}" class="btn btn-outline-secondary">Cancel</a>
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-check2-circle me-1"></i> Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

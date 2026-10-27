@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Content: {{ resume.title }} — ResumeForge AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+      <div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-pencil-square text-primary me-2"></i> Structured Resume Editor</h5>
+        <small class="text-muted">Fine-tune wording, adjust bullet points, and polish action verbs.</small>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="{% url 'resume_preview' resume.pk %}" class="btn btn-outline-secondary btn-sm">Cancel</a>
+      </div>
+    </div>
+    <div class="card-body p-4">
+      <form method="post" id="resumeEditForm">
+        {% csrf_token %}
+
+        <!-- General Settings -->
+        <h6 class="text-uppercase text-muted small fw-bold mb-3">1. Resume Configuration</h6>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Resume Title</label>
+            {{ form.title }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Target Role</label>
+            {{ form.target_role }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Template Style</label>
+            {{ form.template_name }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Typography / Font</label>
+            {{ form.font_family }}
+          </div>
+        </div>
+
+        <!-- Contact Header Info -->
+        <h6 class="text-uppercase text-muted small fw-bold mb-3">2. Header & Contact Details</h6>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Full Name</label>
+            {{ form.full_name }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Email Address</label>
+            {{ form.email }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Phone</label>
+            {{ form.phone }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">Location</label>
+            {{ form.location }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">LinkedIn URL</label>
+            {{ form.linkedin_url }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-medium">GitHub URL</label>
+            {{ form.github_url }}
+          </div>
+        </div>
+
+        <!-- Professional Summary -->
+        <h6 class="text-uppercase text-muted small fw-bold mb-2">3. Executive Summary</h6>
+        <div class="mb-4">
+          {{ form.professional_summary }}
+          <div class="form-text small">Concisely highlight your qualifications and key engineering strengths.</div>
+        </div>
+
+        <!-- Skills Included -->
+        <h6 class="text-uppercase text-muted small fw-bold mb-2">4. Core Skills (Comma-Separated)</h6>
+        <div class="mb-4">
+          <textarea name="skills_csv" class="form-control" rows="3">{{ skills_csv }}</textarea>
+          <div class="form-text small">Separate technical tools and skills with commas. Match keywords from the target role.</div>
+        </div>
+
+        <!-- Experience Bullets -->
+        {% if resume.selected_experiences %}
+          <h6 class="text-uppercase text-muted small fw-bold mb-3">5. Work Experience Bullets</h6>
+          {% for exp in resume.selected_experiences %}
+            <div class="card mb-3 p-3 bg-light border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0 fw-bold">{{ exp.job_title }} at {{ exp.organization }}</h6>
+                <small class="text-muted">{{ exp.start_date }} – {{ exp.end_date }}</small>
+              </div>
+              <label class="form-label small fw-medium text-muted">Bullet Points (One per line):</label>
+              <textarea name="exp_{{ forloop.counter0 }}_bullets" id="exp_{{ forloop.counter0 }}" class="form-control mb-2" rows="4">{% for b in exp.bullets %}{{ b }}
+{% endfor %}</textarea>
+              <div>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btn_exp_{{ forloop.counter0 }}"
+                        onclick="enhanceBulletAjax('exp_{{ forloop.counter0 }}', '{{ resume.target_role }}', '{{ csrf_token }}');">
+                  <i class="bi bi-magic me-1"></i> AI Polish Action Verbs
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- Project Bullets -->
+        {% if resume.selected_projects %}
+          <h6 class="text-uppercase text-muted small fw-bold mb-3">6. Technical Project Bullets</h6>
+          {% for proj in resume.selected_projects %}
+            <div class="card mb-3 p-3 bg-light border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0 fw-bold">{{ proj.title }}</h6>
+                <small class="text-muted">{{ proj.technologies }}</small>
+              </div>
+              <label class="form-label small fw-medium text-muted">Bullet Points (One per line):</label>
+              <textarea name="proj_{{ forloop.counter0 }}_bullets" id="proj_{{ forloop.counter0 }}" class="form-control mb-2" rows="4">{% for b in proj.bullets %}{{ b }}
+{% endfor %}</textarea>
+              <div>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btn_proj_{{ forloop.counter0 }}"
+                        onclick="enhanceBulletAjax('proj_{{ forloop.counter0 }}', '{{ resume.target_role }}', '{{ csrf_token }}');">
+                  <i class="bi bi-magic me-1"></i> AI Polish Action Verbs
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-4">
+          <a href="{% url 'resume_preview' resume.pk %}" class="btn btn-outline-secondary">Cancel</a>
+          <button type="submit" class="btn btn-success px-4">
+            <i class="bi bi-check2-circle me-1"></i> Save Changes & View Preview
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

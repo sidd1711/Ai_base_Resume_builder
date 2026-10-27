@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}ResumeForge AI — Craft Fact-Checked, ATS-Conscious Resumes{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Hero Section -->
+  <div class="row align-items-center py-5">
+    <div class="col-lg-7 text-center text-lg-start pe-lg-5">
+      <div class="badge bg-primary-subtle text-primary border border-primary-subtle mb-3 px-3 py-2 fs-6">
+        <i class="bi bi-shield-lock me-1"></i> Truth-Preserving AI & Deterministic ATS Engine
+      </div>
+      <h1 class="display-4 fw-bold lh-sm mb-3">
+        Build Job-Specific Resumes That Respect <span class="brand-gradient">Your True Experience</span>.
+      </h1>
+      <p class="lead text-muted mb-4">
+        ResumeForge AI analyzes job descriptions, extracts core skill requirements, sharpens your wording using strong action verbs, and verifies ATS keyword coverage—without ever inventing false qualifications.
+      </p>
+      <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+        <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 shadow-sm">
+          <i class="bi bi-rocket-takeoff me-2"></i> Start Building Free
+        </a>
+        <a href="#how-it-works" class="btn btn-outline-secondary btn-lg px-4">
+          <i class="bi bi-play-circle me-2"></i> How It Works
+        </a>
+      </div>
+      <div class="d-flex align-items-center gap-4 mt-4 pt-2 text-muted small">
+        <div><i class="bi bi-check2-circle text-success me-1"></i> No Credit Card Required</div>
+        <div><i class="bi bi-check2-circle text-success me-1"></i> Instant PDF & DOCX Export</div>
+        <div><i class="bi bi-check2-circle text-success me-1"></i> 100% Private</div>
+      </div>
+    </div>
+    <div class="col-lg-5 mt-5 mt-lg-0">
+      <!-- Interactive Resume & ATS Score Mock Card -->
+      <div class="card shadow-lg border-0 overflow-hidden">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2 px-3">
+          <span class="small font-monospace"><i class="bi bi-code-slash text-info me-1"></i> ATS Match Diagnostics</span>
+          <span class="badge bg-success">92% Match</span>
+        </div>
+        <div class="card-body p-4 bg-light">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+              <h5 class="mb-0 fw-bold">Alex Johnson</h5>
+              <small class="text-primary fw-medium">Python & Full-Stack Developer</small>
+            </div>
+            <div class="score-circle" style="width: 70px; height: 70px; border-width: 4px;">
+              <span class="number fs-5">92%</span>
+            </div>
+          </div>
+          <hr class="my-2">
+          <h6 class="text-uppercase text-muted small fw-bold mb-2">Matched Key Requirements</h6>
+          <div class="d-flex flex-wrap gap-1 mb-3">
+            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-lg me-1"></i>Python</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-lg me-1"></i>Django</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-lg me-1"></i>PostgreSQL</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-lg me-1"></i>REST APIs</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-lg me-1"></i>Docker</span>
+          </div>
+          <h6 class="text-uppercase text-muted small fw-bold mb-2">Identified Gaps (Honest Feedback)</h6>
+          <div class="d-flex flex-wrap gap-1">
+            <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-exclamation-triangle me-1"></i>Redis</span>
+            <span class="badge bg-light text-secondary border">Kubernetes (Preferred)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-5 border-top">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">How ResumeForge AI Works</h2>
+      <p class="text-muted">A clear, transparent workflow built for students, graduates, and professionals.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card h-100 text-center p-4 border-0 shadow-sm">
+          <div class="fs-1 text-primary mb-3"><i class="bi bi-person-lines-fill"></i></div>
+          <h5 class="fw-bold">1. Enter Master Profile</h5>
+          <p class="text-muted small">Input your genuine education, skills, projects, and work history once. Or upload a PDF to pre-fill it.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 text-center p-4 border-0 shadow-sm">
+          <div class="fs-1 text-primary mb-3"><i class="bi bi-search"></i></div>
+          <h5 class="fw-bold">2. Analyze Job Role</h5>
+          <p class="text-muted small">Paste any target job description. Our NLP engine extracts required and preferred technical keywords.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 text-center p-4 border-0 shadow-sm">
+          <div class="fs-1 text-primary mb-3"><i class="bi bi-magic"></i></div>
+          <h5 class="fw-bold">3. Fact-Checked Tailoring</h5>
+          <p class="text-muted small">AI reformulates your bullet points with active verbs and STAR structure without inventing false data.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 text-center p-4 border-0 shadow-sm">
+          <div class="fs-1 text-primary mb-3"><i class="bi bi-file-earmark-pdf"></i></div>
+          <h5 class="fw-bold">4. ATS Audit & Export</h5>
+          <p class="text-muted small">Run transparent diagnostic scoring, inspect keyword gaps, and download clean PDF and DOCX files.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates Preview Section -->
+  <section id="templates" class="py-5 border-top bg-white rounded-4 p-4 shadow-sm my-4">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">5 ATS-Conscious Resume Templates</h2>
+      <p class="text-muted">Single-column, machine-readable layouts designed for maximum ATS parsing clarity.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 p-3">
+          <h6 class="fw-bold text-primary mb-1">1. Classic Professional</h6>
+          <small class="text-muted mb-2 d-block">Universal single-column standard for corporate & general roles.</small>
+          <div class="p-3 bg-light rounded border text-muted small font-monospace">
+            <b>NAME & CONTACT</b><br>
+            Professional Summary<br>
+            Skills • Experience • Education
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 p-3">
+          <h6 class="fw-bold text-primary mb-1">2. Modern Minimal</h6>
+          <small class="text-muted mb-2 d-block">Balanced whitespace and elegant, readable typography.</small>
+          <div class="p-3 bg-light rounded border text-muted small font-monospace">
+            <b>NAME & ROLE</b><br>
+            Selected Competencies<br>
+            Chronological Experience
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 p-3">
+          <h6 class="fw-bold text-primary mb-1">3. Technical Resume</h6>
+          <small class="text-muted mb-2 d-block">Optimized for software developers and engineering roles.</small>
+          <div class="p-3 bg-light rounded border text-muted small font-monospace">
+            <b>TECH STACK & SKILLS</b><br>
+            Featured Technical Projects<br>
+            Architectural Contributions
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100 p-3">
+          <h6 class="fw-bold text-primary mb-1">4. Graduate & Fresher</h6>
+          <small class="text-muted mb-2 d-block">Prioritizes academic qualifications, coursework, hackathons, and certifications.</small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100 p-3">
+          <h6 class="fw-bold text-primary mb-1">5. Experienced Professional</h6>
+          <small class="text-muted mb-2 d-block">Emphasizes verified leadership milestones and multi-year employment history.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ATS Diagnostics Section -->
+  <section id="ats-checker" class="py-5 border-top">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-3">Transparent ATS Scoring</h2>
+        <p class="text-muted mb-4">
+          Unlike platforms that provide arbitrary "magic numbers", ResumeForge AI breaks down your resume's readiness across verifiable dimensions:
+        </p>
+        <ul class="list-unstyled">
+          <li class="d-flex align-items-start mb-3">
+            <i class="bi bi-check-circle-fill text-success fs-5 me-3"></i>
+            <div>
+              <strong>Keyword Coverage Rate:</strong> Exact calculation of matched required vs. preferred keywords extracted from the job description.
+            </div>
+          </li>
+          <li class="d-flex align-items-start mb-3">
+            <i class="bi bi-check-circle-fill text-success fs-5 me-3"></i>
+            <div>
+              <strong>Section Completeness:</strong> Audit of core ATS sections (Contact, Summary, Experience, Education, Skills).
+            </div>
+          </li>
+          <li class="d-flex align-items-start mb-3">
+            <i class="bi bi-check-circle-fill text-success fs-5 me-3"></i>
+            <div>
+              <strong>Formatting Diagnostics:</strong> Identifies overly long bullet points, date formatting discrepancies, and invalid email formats.
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-6 text-center">
+        <div class="p-4 bg-white rounded-4 shadow-sm border">
+          <div class="badge bg-info-subtle text-info border mb-3">Honest Feedback Engine</div>
+          <h5 class="fw-bold">Never Compromise Your Professional Integrity</h5>
+          <p class="text-muted small">
+            We flag missing requirements as learning gaps or suggest highlighting relevant coursework—we never fabricate jobs or false skills.
+          </p>
+          <a href="{% url 'register' %}" class="btn btn-primary px-4">Create Your Profile Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

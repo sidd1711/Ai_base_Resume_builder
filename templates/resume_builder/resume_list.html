@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}My Resumes — ResumeForge AI{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+    <div>
+      <h3 class="fw-bold mb-1">My Saved Resumes</h3>
+      <p class="text-muted small mb-0">Manage tailored versions for different applications and career paths.</p>
+    </div>
+    <a href="{% url 'resume_create_wizard' %}" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg me-1"></i> Create New Resume
+    </a>
+  </div>
+
+  {% if resumes %}
+    <div class="row g-4">
+      {% for resume in resumes %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm border p-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="fw-bold mb-0 text-truncate" title="{{ resume.title }}">{{ resume.title }}</h5>
+              <span class="badge bg-light text-dark border small">{{ resume.get_template_name_display|truncatewords:2 }}</span>
+            </div>
+            <p class="text-primary small mb-1"><i class="bi bi-briefcase me-1"></i>{{ resume.target_role }}</p>
+            <p class="text-muted small mb-3">Updated {{ resume.updated_at|timesince }} ago</p>
+
+            <div class="mt-auto d-flex flex-wrap gap-1 border-top pt-2">
+              <a href="{% url 'resume_preview' resume.pk %}" class="btn btn-sm btn-primary py-1 px-2">
+                <i class="bi bi-eye me-1"></i> Preview
+              </a>
+              <a href="{% url 'ats_analyze_resume' resume.pk %}" class="btn btn-sm btn-outline-success py-1 px-2">
+                <i class="bi bi-speedometer2 me-1"></i> ATS Audit
+              </a>
+              <a href="{% url 'resume_edit' resume.pk %}" class="btn btn-sm btn-outline-secondary py-1 px-2">
+                <i class="bi bi-pencil me-1"></i> Edit
+              </a>
+              <a href="{% url 'resume_versions' resume.pk %}" class="btn btn-sm btn-light py-1 px-2 border" title="Versions">
+                <i class="bi bi-clock-history"></i>
+              </a>
+              <form method="post" action="{% url 'resume_delete' resume.pk %}" class="d-inline" onsubmit="return confirm('Permanently delete this resume?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-file-earmark-plus text-muted" style="font-size: 3rem;"></i>
+      <h5 class="fw-bold mt-3 mb-1">No resumes created yet</h5>
+      <p class="text-muted small mb-3">Start crafting your first tailored resume using your verified profile data.</p>
+      <a href="{% url 'resume_create_wizard' %}" class="btn btn-primary btn-sm px-3">
+        <i class="bi bi-plus-lg me-1"></i> Build Resume
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
